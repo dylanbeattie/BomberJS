@@ -4,3 +4,6 @@
 [submodule "miksago"]
 	path = miksago
 	url = git://github.com/miksago/node-websocket-server.git
+[submodule "nodejs/node-websocket-server"]
+	path = nodejs/node-websocket-server
+	url = git://github.com/miksago/node-websocket-server.git
