@@ -7,3 +7,6 @@
 [submodule "nodejs/node-websocket-server"]
 	path = nodejs/node-websocket-server
 	url = git://github.com/miksago/node-websocket-server.git
+[submodule "common/json-js"]
+	path = common/json-js
+	url = git://github.com/douglascrockford/JSON-js.git

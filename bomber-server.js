@@ -3,7 +3,8 @@ var http = require("http");
 var url = require("url");
 var path = require("path");
 var fs = require("fs");
-var ws = require('./lib/ws/server');
+var ws = require('./nodejs/node-websocket-server/lib/ws/server');
+var json = require('./common/json2.js');
 
 /* Create a static file server */
 var server = http.createServer(function (request, response) {
@@ -65,6 +66,16 @@ socketServer.addListener("connection", function (conn) {
 	conn.send("Connection: " + conn.id);
 
 	conn.addListener("message", function (message) {
+		sys.puts("GOT AR MESSARGE!");
+		try {
+			sys.puts(message);
+			var data = json.JSON.parse(message);
+			if (data && data.hi) sys.puts(data.hi);
+		} catch (ex) {
+			sys.puts("ERROR PARSEING STUFF");
+			sys.puts(ex);
+		}
+
 		conn.broadcast("<" + conn.id + "> " + message);
 
 		if (message == "error") {

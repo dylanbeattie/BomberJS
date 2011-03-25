@@ -7,7 +7,7 @@
 }
 
 div#log {
-	height: 400px;
+	height: 200px;
 	overflow: auto;
 	
 	font-family: Consolas;
