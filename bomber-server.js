@@ -61,22 +61,38 @@ var server = http.createServer(function (request, response) {
 
 
 var socketServer = ws.createServer({ server: server, debug: true });
+var colors = ['ff9999', '99ff99', 'ffff99', '9999ff', '99ffff', 'ff99ff'];
+var playerCount = 0;
+var playerColors = {};
 // Handle WebSocket Requests
 socketServer.addListener("connection", function (conn) {
-	conn.send("Connection: " + conn.id);
+	// conn.send("Connection: " + conn.id);
+
+	playerColors[conn.id] = colors[playerCount++ % colors.length];
+	sys.puts('assigned ' + playerColors[conn.id] + ' to ' + conn.id);
 
 	conn.addListener("message", function (message) {
-		sys.puts("GOT AR MESSARGE!");
+		var responseData, responseJson;
 		try {
-			sys.puts(message);
 			var data = json.JSON.parse(message);
-			if (data && data.hi) sys.puts(data.hi);
+			var username = data.username;
+			switch (data.type) {
+				case 'join':
+					sys.puts('Player ' + username + ' joined with client ID ' + conn.id);
+					responseData = { color: playerColors[conn.id], message: username + ' joined the room!' };
+					break;
+				default:
+					responseData = { color: playerColors[conn.id], message: username + ': ' + data.message };
+					break;
+			}
+			var responseJson = json.JSON.stringify(responseData);
+			sys.puts(responseJson);
+			socketServer.broadcast(responseJson);
 		} catch (ex) {
-			sys.puts("ERROR PARSEING STUFF");
-			sys.puts(ex);
+			responseData = { color: playerColors[conn.id], message: '!error!' };
+			conn.broadcast(responseJson);
 		}
 
-		conn.broadcast("<" + conn.id + "> " + message);
 
 		if (message == "error") {
 			conn.emit("error", "test");

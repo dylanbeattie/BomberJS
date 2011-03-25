@@ -15,9 +15,11 @@ Function.bind = function () {
 	return Function.prototype.bind.apply(args.shift(), args);
 }
 
-function BomberClient() {
+function BomberClient(username) {
 	var conn, recvd, connections = 0;
-	this.connect = function (username) {
+
+	this.connect = function () {
+		this.username = username;
 		if (window.WebSocket) {
 			recvd = 0;
 			host = (document.location.host != "" ? document.location.host : "localhost:8000");
@@ -29,13 +31,24 @@ function BomberClient() {
 		}
 	}
 
-	log = function (message) {
-		$("#log").append('<div>' + message + '</div>');
+	log = function (message, color) {
+		$("#log").append('<div style="color: #' + color + ';"> ' + message + '</div>');
 	}
 
 	onmessage = function (evt) {
-		log(evt.data);
+		try {
+			var data = JSON.parse(evt.data);
+			if (data && data.color) {
+				log(data.message, data.color);
+			} else {
+				log(evt.data);
+			}
+		} catch (exception) {
+			log(evt.data);
+			log(exception.message);
+		}
 	}
+
 	onerror = function () {
 		log("error", arguments);
 	}
@@ -44,28 +57,30 @@ function BomberClient() {
 	}
 	onopen = function () {
 		log("opened");
-		var data = { hi : 'there', jam: 'trousers' };
+		var data = { type : 'join', username: username };
 		this.sendMessage(JSON.stringify(data));
 	}
 
 	this.sendMessage = function (message) {
-		log("transmitting " + message);
 		if (message) {
-			log(message);
 			setTimeout(function () { conn.send(message); }, 0);
 		}
 		$("#chat-line").val('');
 	}
 }
 
-var bomber = new BomberClient();
-
 $(function () {
+	//	var usernames = ['dylan', 'steve', 'carol', 'wayne', 'kenny', 'wendy', 'kathy', 'holly', 'ham', 'bob', 'kit', 'wayne', 'joe', 'micki', 'kelly', 'hooper']
+	//	var username = usernames[Math.floor(Math.random() * usernames.length)];
+	var username = prompt("What's your name?");
+
+	var bomber = new BomberClient(username);
 	$("#chat-form").submit(function () {
 		var message = $("#chat-line").val();
-		bomber.sendMessage(message);
+		var data = { username: username, message: message };
+		var jsonData = JSON.stringify(data);
+		bomber.sendMessage(jsonData);
 		return (false);
 	});
-	var username = 'dylan'; //  prompt('Who are you?', 'dylan');
-	bomber.connect(username);
+	bomber.connect();
 });

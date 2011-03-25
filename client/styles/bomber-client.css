@@ -7,7 +7,7 @@
 }
 
 div#log {
-	height: 200px;
+	height: 400px;
 	overflow: auto;
 	
 	font-family: Consolas;
@@ -17,7 +17,7 @@ div#log-wrapper {
 	position: absolute;
 	right: 10px;
 	top: 10px;
-	width: 300px;
+	width: 600px;
 	background-color: #000;
-	color: #0f0;
+	color: #999;
 }
