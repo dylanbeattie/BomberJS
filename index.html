@@ -28,8 +28,8 @@
 </pre>
 	<h2>How The Game Works</h2>
 	<p>The server runs an instance of BomberServer.</p>
-	<p>BomberServer contains a BomberGame. A BomberGame represents the current state of 
-		a particular game, where state is defined as:</p>
+	<p>BomberServer contains exactly one BomberGame. A BomberGame represents the current 
+		state of a particular game, where state is defined as:</p>
 	<p style="margin-left: 40px">A collection of players, each responsible for its&#39; own 
 		state</p>
 	<p style="margin-left: 40px">The current state of the level (terrain, power-ups)</p>
@@ -55,11 +55,17 @@
 			to send them the current game state (map, players, and scores), a spawn 
 			location, a color, and a player ID. The client should draw the map based on the 
 			game state, spawn the new player at the specified location, and start listening 
-			for events</dd>
+			for events.</dd>
+		<dd style="margin-left: 40px">
+			<br />
+			<b>Format: { type: &#39;join-game&#39;, data: { player: [player], game: [game] }}</b></dd>
+		<dt></dt>
 		<dt>change-direction</dt>
 		<dd>A client has started or stopped moving, or changed the direction they&#39;re moving 
 			in. Raised in response to input events (keypresses), and collisions (client 
-			running into walls, arena limits, or hitting another player)</dd>
+			running into walls, arena limits, or hitting another player)<br />
+			<br />
+			<b>Format: { type: &#39;changed-direction&#39;, data { player: [player] } }</b></dd>
 		<dt>drop-bomb</dt>
 		<dd style="margin-left: 40px">A client has dropped a bomb. Event must encode the 
 			location where the bomb was dropped.</dd>
@@ -73,6 +79,23 @@
 	</dl>
 	<p>Each client must listen for the following events transmitted by the server:</p>
 	<dl>
+		<dt>player-joined</dt>
+		<dd>A new player has joined the game. Data will encode the new player&#39;s name, color, 
+			ID and spawn point.<br />
+			<br />
+			<b>{ type: &#39;player-joined&#39;, data: { id: player.id, color: player.color, 
+			position: player.position, name: player.name} }</b></dd>
+		<dt>game-init</dt>
+		<dd>The clients&#39; request to join the server was accepted. Data contains the initial 
+			game state.</dd>
+		<dt>player-changed-direction</dt>
+		<dd>A player changed direction (or stopped moving). This will also include the map 
+			coordinates where the change happened, and so provides syncing of client/server 
+			state.</dd>
+		<dt>bomb-dropped</dt>
+		<dd>A player dropped a bomb. The client must draw a bomb at the specified 
+			coordinates and start the countdown timing loop.</dd>
+		<dt></dt>
 		<dd></dd>
 	</dl>
 	<p>&nbsp;</p>

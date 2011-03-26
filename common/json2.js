@@ -480,4 +480,8 @@ if (!JSON) {
 }());
 
 /* This line exposes the JSON parser to node.js' CommonJS extension system */
-exports.JSON = JSON;
+if (typeof(exports) != 'undefined' && exports) {
+	exports.JSON = JSON;
+	exports.stringify = JSON.stringify;
+	exports.parse = JSON.parse;
+}
