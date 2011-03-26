@@ -15,8 +15,18 @@ Function.bind = function () {
 	return Function.prototype.bind.apply(args.shift(), args);
 }
 
+var startingCoordinates = Array({top: 0, left: 0}, {top: 196,left: 196}, {top: 0,left: 196}, {top: 196,left: 0});
+
+function makeSprite(coords, player, color) {
+	var sprite = $('<div class="sprite" id="sprite_' + player + '">');
+	sprite.offset(coords);
+	sprite.css('background-color', '#' + color);
+	$("#arena").append(sprite);
+	return (sprite);
+}
 function BomberClient(username) {
 	var conn, recvd, connections = 0;
+	var sprite;
 
 	this.connect = function () {
 		this.username = username;
@@ -38,10 +48,23 @@ function BomberClient(username) {
 	onmessage = function (evt) {
 		try {
 			var data = JSON.parse(evt.data);
-			if (data && data.color) {
-				log(data.message, data.color);
-			} else {
-				log(evt.data);
+			switch (data.type) {
+				case 'welcome':
+					log('You are player ' + data.player, data.color);
+					var coords = startingCoordinates[data.player-1];
+					this.sprite = makeSprite(coords, data.player, data.color);
+					break;
+				case 'join':
+					log('Player ' + data.player + ' joined the game', data.color);
+					var coords = startingCoordinates[data.player - 1];
+					makeSprite(coords, data.player, data.color);
+					break;
+				default:
+					if (data && data.color) {
+						log(data.message, data.color);
+					} else {
+						log(evt.data);
+					}
 			}
 		} catch (exception) {
 			log(evt.data);
@@ -72,8 +95,8 @@ function BomberClient(username) {
 $(function () {
 	//	var usernames = ['dylan', 'steve', 'carol', 'wayne', 'kenny', 'wendy', 'kathy', 'holly', 'ham', 'bob', 'kit', 'wayne', 'joe', 'micki', 'kelly', 'hooper']
 	//	var username = usernames[Math.floor(Math.random() * usernames.length)];
-	var username = prompt("What's your name?");
-
+	//var username = prompt("What's your name?");
+	var username = '';
 	var bomber = new BomberClient(username);
 	$("#chat-form").submit(function () {
 		var message = $("#chat-line").val();

@@ -5,6 +5,7 @@ var path = require("path");
 var fs = require("fs");
 var ws = require('./nodejs/node-websocket-server/lib/ws/server');
 var json = require('./common/json2.js');
+var bomber = require('./common/bomber.js');
 
 /* Create a static file server */
 var server = http.createServer(function (request, response) {
@@ -73,13 +74,16 @@ socketServer.addListener("connection", function (conn) {
 
 	conn.addListener("message", function (message) {
 		var responseData, responseJson;
+		var clientResponseData;
 		try {
 			var data = json.JSON.parse(message);
 			var username = data.username;
+			if (!username) username = 'Player ' + playerCount;
 			switch (data.type) {
 				case 'join':
 					sys.puts('Player ' + username + ' joined with client ID ' + conn.id);
-					responseData = { color: playerColors[conn.id], message: username + ' joined the room!' };
+					responseData = { type: 'join', player: playerCount, color: playerColors[conn.id], message: username + ' joined the room!' };
+					clientResponseData = { type: 'welcome', player: playerCount, color: playerColors[conn.id] };
 					break;
 				default:
 					responseData = { color: playerColors[conn.id], message: username + ': ' + data.message };
@@ -87,7 +91,12 @@ socketServer.addListener("connection", function (conn) {
 			}
 			var responseJson = json.JSON.stringify(responseData);
 			sys.puts(responseJson);
-			socketServer.broadcast(responseJson);
+
+			if (clientResponseData) {
+				var clientResponseJson = json.JSON.stringify(clientResponseData);
+				socketServer.send(conn.id, clientResponseJson);
+			}
+			conn.broadcast(responseJson);
 		} catch (ex) {
 			responseData = { color: playerColors[conn.id], message: '!error!' };
 			conn.broadcast(responseJson);
@@ -105,6 +114,7 @@ socketServer.addListener("error", function () {
 });
 
 socketServer.addListener("disconnected", function (conn) {
+	playerCount--;
 	server.broadcast("<" + conn.id + "> disconnected");
 });
 

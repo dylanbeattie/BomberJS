@@ -26,3 +26,58 @@
 
     
 </pre>
+	<h2>How The Game Works</h2>
+	<p>The server runs an instance of BomberServer.</p>
+	<p>BomberServer contains a BomberGame. A BomberGame represents the current state of 
+		a particular game, where state is defined as:</p>
+	<p style="margin-left: 40px">A collection of players, each responsible for its&#39; own 
+		state</p>
+	<p style="margin-left: 40px">The current state of the level (terrain, power-ups)</p>
+	<p style="margin-left: 40px">The game scores</p>
+	<p style="margin-left: 40px">A player&#39;s state is the player&#39;s LOCATION and VELOCITY.</p>
+	<p>Each connected client runs a timing loop, and <b>each client is the source of 
+		truth for that player</b>. This is naive from a security perspective because 
+		clients can be spoofed, but we don&#39;t care about that right now.</p>
+	<p>Events</p>
+	<p>Events happen on the client, in response to user input or gameplay. They&#39;re sent 
+		to the server, which broadcasts them to all other clients.</p>
+	<p>When an event is broadcast, we&#39;ll also transmit certain &quot;snapshot&quot; data about the 
+		state of the game, to keep multiple clients in sync.</p>
+	<p>Events are JSON objects encoded as:</p>
+	<pre>{
+    type: [string],
+    data: [json-data]
+}</pre>
+	<p>where the JSON-data varies with the event type.</p>
+	<dl>
+		<dt>join-game</dt>
+		<dd style="margin-left: 40px">A client has connected to the game. The server needs 
+			to send them the current game state (map, players, and scores), a spawn 
+			location, a color, and a player ID. The client should draw the map based on the 
+			game state, spawn the new player at the specified location, and start listening 
+			for events</dd>
+		<dt>change-direction</dt>
+		<dd>A client has started or stopped moving, or changed the direction they&#39;re moving 
+			in. Raised in response to input events (keypresses), and collisions (client 
+			running into walls, arena limits, or hitting another player)</dd>
+		<dt>drop-bomb</dt>
+		<dd style="margin-left: 40px">A client has dropped a bomb. Event must encode the 
+			location where the bomb was dropped.</dd>
+		<dt>bomb-explodes</dt>
+		<dd>A bomb dropped by a client has exploded. Event must encode which bomb it is.</dd>
+		<dt>player-died</dt>
+		<dd>Each client is responsible for detecting whether an explosion has killed the 
+			player and notifying the server when this occurs. Bombs don&#39;t move, and death is 
+			caused by proximity - so it makes sense to use the local client state to decide 
+			whether a player&#39;s died or not.</dd>
+	</dl>
+	<p>Each client must listen for the following events transmitted by the server:</p>
+	<dl>
+		<dd></dd>
+	</dl>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+
