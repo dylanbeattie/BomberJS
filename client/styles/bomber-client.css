@@ -10,11 +10,24 @@ div#arena {
 	position: absolute;
 	left: 20px;
 	top: 20px;
-	width: 300px;
-	height: 300px;
 	border: 1px solid #666;
-	background-color: #ccc;
+	background-color: #393;
 }
+
+div.pillar {
+	border-width: 2px;
+	border-style: outset;
+	border-color: #666;
+	background-color: #ccc;
+	position: absolute;
+}
+button#start-game-button {
+	position: absolute;
+	right: 10px;
+	top: 300px;
+	width: 200px;
+}	
+	
 
 div#log {
 	height: 200px;

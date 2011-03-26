@@ -3,6 +3,8 @@
 	var console = options.console;
 	var JSON = options.JSON;
 
+	this.game = new BomberGame(1, 'Demo Game');
+
 	this.players = {};
 
 	this.handleConnection = function (conn) {
@@ -13,8 +15,6 @@
 	this.makeMessageHandler = function (conn) {
 		return (function (jsonData) {
 			var message = JSON.parse(jsonData);
-//			console.log('Received [' + message.type + '] from ' + conn.id);
-//			console.log(message.data);
 			switch (message.type) {
 				case 'start-game':
 					this.game.start();
@@ -23,10 +23,9 @@
 				case 'join-game':
 					console.log('Received join-game from ' + conn.id);
 					try {
-						var player = this.game.addPlayer(player);
+						var player = this.game.addPlayer();
+						player.id = conn.id;
 						this.players[conn.id] = player;
-						/* Need to send CURRENT game state to the connecting player */
-						/* And details of the NEW PLAYER to all other clients */
 						socketServer.send(conn.id, JSON.stringify({ type: 'game-init', data: { game: this.game, player: player} }));
 						conn.broadcast(JSON.stringify({ type: 'player-joined', data: player }));
 					} catch (ex) {
@@ -34,7 +33,8 @@
 					}
 					break;
 				case 'change-direction':
-					bomberServer.changeDirection(message.data);
+					this.game.updatePlayer(message.data);
+					conn.broadcast(JSON.stringify({ type: 'player-changed-direction', data: message.data }));
 					break;
 			}
 		});
@@ -48,10 +48,7 @@
 		});
 	}
 			
-
-	this.game = new BomberGame(1, 'Demo Game');
-
-	socketServer.addListener("error", (function () { console.log(Array.prototype.join.call(arguments, ", ")); }).bind(this));
+	socketServer.addListener("error", function () { console.log(Array.prototype.join.call(arguments, ", ")); });
 	socketServer.addListener("disconnected", this.makeDisconnectHandler().bind(this));
 	socketServer.addListener("connection", this.handleConnection.bind(this));
 }
@@ -76,8 +73,21 @@ function BomberGame(id, name) {
 			player.color = this.playerColors[playerNumber];
 			player.name = 'Player ' + (playerNumber + 1);
 		}
+		//player.game = this;
 		this.players.push(player);
 		return (player);
+	}
+
+	/* Update the player with fresh position/velocity data transmitted by the server */
+	this.updatePlayer = function (data) {
+		var player;
+		for (var i = 0; i < this.players.length; i++) {
+			player = this.players[i];
+			if (player.id == data.id) {
+				player.position = data.position;
+				player.velocity = data.velocity;
+			}
+		}
 	}
 
 	this.removePlayer = function (player) {
@@ -87,6 +97,7 @@ function BomberGame(id, name) {
 	this.start = function () {
 		this.started = true;
 	}
+	this.arena = new BomberArena(this);
 }
 
 BomberGame.FromData = function (data) {
@@ -94,6 +105,24 @@ BomberGame.FromData = function (data) {
 	game.id = data.id;
 	game.name = (data.name ? data.name : 'Game #' + data.id);
 	return (game);
+}
+
+function Pillar(top,left,width,height) {
+	this.top = top;
+	this.left = left;
+	this.width = width;
+	this.height = height;
+}
+function BomberArena() {
+	tileSize = 32;
+	this.width = (9 * tileSize);
+	this.height = (9 * tileSize);
+	this.pillars = [];
+	for(var x = 0; x < 4; x++) {
+		for (var y = 0; y < 4; y++) {
+			this.pillars.push(new Pillar(tileSize + (x * 2 * tileSize), tileSize + (y * 2 * tileSize), tileSize, tileSize));
+		}
+	}
 }
 
 function BomberPlayer(id, name, color, position, velocity) {
@@ -104,16 +133,17 @@ function BomberPlayer(id, name, color, position, velocity) {
 	this.velocity = (velocity && (velocity.dx || velocity.dy) ? velocity : { dx: 0, dy: 0 });
 
 	this.goUp = function () { this.velocity.dy = -1; }
-	this.goDown = function () { this.velocity.dy = 1; }
+	this.goDown = function () { this.velocity.dy = +1; }
 	this.verticalStop = function () { this.velocity.dy = 0; }
 
-	this.goLeft = function () { this.velocity.dx = 1; }
-	this.goRight = function () { this.velocity.dx = -1; }
+	this.goLeft = function () { this.velocity.dx = -1; }
+	this.goRight = function () { this.velocity.dx = +1; }
 	this.horizontalStop = function () { this.velocity.dx = 0; }
 
-	this.updatePosition = function () {
-		this.position.left += this.velocity.dx;
-		this.position.top += this.velocity.dy;
+	this.updatePosition = function (factor) {
+		if (!factor) factor = 1;
+		this.position.left += (factor * this.velocity.dx);
+		this.position.top += (factor * this.velocity.dy);
 	}
 }
 

@@ -10,7 +10,7 @@
 	<h1>Chat Room</h1>
 	<hr />
 	<h2>Contents</h2>
-	<a href="client/bomber.html">Click here to join the room</a>
+	<a href="client/bomber.html">Click here to join the game</a>
 	<!--
 	<pre>
 [root]
@@ -65,7 +65,8 @@
 			in. Raised in response to input events (keypresses), and collisions (client 
 			running into walls, arena limits, or hitting another player)<br />
 			<br />
-			<b>Format: { type: &#39;changed-direction&#39;, data { player: [player] } }</b></dd>
+			<b>Format: { type: &#39;changed-direction&#39;, data { id: [player.id], 
+			position: [player.position], velocity: [player.velocity] } }</b></dd>
 		<dt>drop-bomb</dt>
 		<dd style="margin-left: 40px">A client has dropped a bomb. Event must encode the 
 			location where the bomb was dropped.</dd>
