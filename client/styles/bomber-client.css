@@ -24,8 +24,15 @@ div.pillar {
 button#start-game-button {
 	position: absolute;
 	right: 10px;
-	top: 300px;
-	width: 200px;
+	top: 260px;
+	width: 150px;
+}	
+
+button#stop-game-button {
+	position: absolute;
+	right: 10px;
+	top: 285px;
+	width: 150px;
 }	
 	
 
@@ -40,7 +47,7 @@ div#log-wrapper {
 	position: absolute;
 	right: 10px;
 	top: 10px;
-	width: 200px;
+	width: 150px;
 	background-color: #000;
 	color: #999;
 }

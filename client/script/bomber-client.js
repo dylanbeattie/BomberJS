@@ -107,7 +107,10 @@ function BomberClient(player) {
 
 	this.startGame = function () {
 		window.game.start();
-		window.setInterval(this.animate, 10);
+		this.timerId = window.setInterval(this.animate, 10);
+	}
+	this.stopGame = function () {
+		window.clearInterval(this.timerId)
 	}
 
 	this.startOfflineGame = function () {
@@ -136,11 +139,9 @@ function BomberClient(player) {
 					log("GO GO GO!");
 					this.startGame();
 					break;
-
 				case 'player-changed-direction':
 					window.game.updatePlayer(message.data);
 					break;
-
 				case 'player-joined':
 					log(message.data.name + ' joined the game', message.data.color);
 					var player = new BomberPlayer(message.data.id, message.data.name, message.data.color);
@@ -180,17 +181,15 @@ function BomberClient(player) {
 		setTimeout(function () { conn.send(JSON.stringify(jsonData)) }, 0);
 	}
 
-
-
 	this.sendChat = function (message) {
 		var jsonData = new { type: 'chat', data: message };
 		this.sendJson(jsonData);
 	}
 
 	this.animate = function () {
+		window.game.updatePositions();
 		for (var i = 0; i < window.game.players.length; i++) {
 			var player = window.game.players[i];
-			player.updatePosition(gameSpeed);
 			var offset = { top: origin.top + player.position.top, left: origin.left + player.position.left };
 			player.sprite.offset(offset);
 			player.sprite.html(offset.top + ',' + offset.left);
@@ -206,30 +205,33 @@ function BomberClient(player) {
 		this.sendJson({ type: 'change-direction', data: jsonData });
 	}
 
-
 	this.keydown = function (e) {
 		switch (e.which) {
-			case KeyCodes.UpArrow: window.player.goUp(); break;
-			case KeyCodes.DownArrow: window.player.goDown(); break;
-			case KeyCodes.LeftArrow: window.player.goLeft(); break;
-			case KeyCodes.RightArrow: window.player.goRight(); break;
+//			case KeyCodes.UpArrow: window.player.goUp(); break;
+//			case KeyCodes.DownArrow: window.player.goDown(); break;
+//			case KeyCodes.LeftArrow: window.player.goLeft(); break;
+//			case KeyCodes.RightArrow: window.player.goRight(); break;
+			case KeyCodes.UpArrow: window.player.moveUp(window.game.arena); break;
+			case KeyCodes.DownArrow: window.player.moveDown(window.game.arena); break;
+			case KeyCodes.LeftArrow: window.player.moveLeft(window.game.arena); break;
+			case KeyCodes.RightArrow: window.player.moveRight(window.game.arena); break;
 		}
 		this.notifyChangeDirection();
 	}
-	this.keyup = function (e) {
-		log("keyup " + e.which, window.player.color);
-		switch (e.which) {
-			case KeyCodes.UpArrow:
-			case KeyCodes.DownArrow:
-				window.player.verticalStop();
-				break;
-			case KeyCodes.LeftArrow:
-			case KeyCodes.RightArrow:
-				window.player.horizontalStop();
-				break;
-		}
-		this.notifyChangeDirection();
-	}
+//	this.keyup = function (e) {
+//		log("keyup " + e.which, window.player.color);
+//		switch (e.which) {
+//			case KeyCodes.UpArrow:
+//			case KeyCodes.DownArrow:
+//				window.player.verticalStop();
+//				break;
+//			case KeyCodes.LeftArrow:
+//			case KeyCodes.RightArrow:
+//				window.player.horizontalStop();
+//				break;
+//		}
+//		this.notifyChangeDirection();
+//	}
 }
 
 $(function () {
@@ -248,9 +250,13 @@ $(function () {
 	});
 
 	$("html").bind('keydown', client.keydown.bind(client));
-	$("html").bind('keyup', client.keyup.bind(client));
+	//$("html").bind('keyup', client.keyup.bind(client));
 	$("#start-game-button").click(function () {
 		client.notifyStartGame();
+	});
+
+	$("#stop-game-button").click(function () {
+		client.stopGame();
 	});
 
 	client.connect();
