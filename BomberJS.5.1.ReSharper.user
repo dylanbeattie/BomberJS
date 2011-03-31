@@ -1,0 +1,63 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/f:index.html" caret="866" fromTop="12" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/f:bomber.html" caret="284" fromTop="10" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/f:dualhead.html" caret="229" fromTop="9" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/f:bomber-server.js" caret="1122" fromTop="29" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="5407" fromTop="15" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:nodejs/d:node-websocket-server/d:docs/f:index.html" caret="16879" fromTop="4" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:styles/f:bomber-client.css" caret="293" fromTop="19" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:script/f:bomber-client.js" caret="6309" fromTop="22" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="3260" fromTop="20" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/f:dualhead.html" caret="207" fromTop="8" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:styles/f:bomber-client.css" caret="726" fromTop="32" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:styles/f:bomber-client.css" caret="419" fromTop="9" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:styles/f:bomber-client.css" caret="519" fromTop="16" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="35" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="33" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="35" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="5513" fromTop="36" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="29" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="29" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="4356" fromTop="17" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="4359" fromTop="28" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="18" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7499" fromTop="32" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7441" fromTop="35" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7497" fromTop="29" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="5799" fromTop="13" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="6041" fromTop="12" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="4342" fromTop="23" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="4059" fromTop="20" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="4183" fromTop="9" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="4309" fromTop="13" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="7260" fromTop="24" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:script/f:bomber-client.js" caret="6563" fromTop="18" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:script/f:bomber-client.js" caret="6005" fromTop="10" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:script/f:bomber-client.js" caret="6983" fromTop="34" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:script/f:bomber-client.js" caret="7597" fromTop="29" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:client/d:script/f:bomber-client.js" caret="6552" fromTop="25" />
+      <File id="519CBF1B-90BB-4831-8190-3B3A6BE957F6/d:common/f:bomber.js" caret="5320" fromTop="15" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir>C:\Program Files (x86)\NUnit 2.5.8\bin\net-2.0\</NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+</Configuration>

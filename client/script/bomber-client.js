@@ -26,15 +26,13 @@ KeyCodes.SpaceBar = 32;
 var startingCoordinates = Array({ top: 0, left: 0 }, { top: 196, left: 196 }, { top: 0, left: 196 }, { top: 196, left: 0 });
 
 function BomberClient(player) {
-	var conn, recvd, connections = 0;
-	var sprite;
+	var conn;
 	var gameSpeed = 2;
 
 	var origin = $("#arena").offset();
 
 	this.connect = function () {
 		if (window.WebSocket) {
-			recvd = 0;
 			host = (document.location.host != "" ? document.location.host : "localhost:8000");
 			conn = new WebSocket("ws://" + host + "/test");
 			conn.onmessage = onmessage.bind(this);
@@ -63,46 +61,57 @@ function BomberClient(player) {
 
 
 	this.init = function (data) {
-		var game = BomberGame.FromData(data.game);
+		window.game = BomberGame.FromData(data.game);
+		this.drawArena(window.game);
 		var tempPlayer;
-
-		window.game = game;
-		this.drawArena(game);
-
 		for (var i = 0; i < data.game.players.length; i++) {
-			tempPlayer = BomberPlayer.FromData(data.game.players[i]);
-			this.initPlayer(tempPlayer);
-			if (tempPlayer.id == data.player.id) {
-				log('You are ' + tempPlayer.name, tempPlayer.color);
-				window.player = tempPlayer;
+			if (data.game.players[i]) {
+				tempPlayer = BomberPlayer.FromData(data.game.players[i]);
+				this.initPlayer(tempPlayer);
+				if (tempPlayer.id == data.player.id) {
+					log('You are ' + tempPlayer.name, tempPlayer.color);
+					window.player = tempPlayer;
+				} 
 			}
 		}
 		if (conn && conn.readyState == conn.OPEN) {
-			if (data.game.players.length == 1) {
-				$("#start-game-button").removeAttr('disabled');
-			}
+			$("#start-game-button").removeAttr('disabled');
 		} else {
 			log('No connection found - running offline.');
 			this.startGame();
 		}
 	}
 	this.notifyStartGame = function () {
-		alert("Starting game...");
 		window.setTimeout(function () {
-			log("Sending start-game signal...");
+			log("Starting game...");
 			conn.send(JSON.stringify({ type: 'start-game' }));
 		}, 0);
 	}
 
 
-	this.initPlayer = function (player) {
+	this.initPlayer = function (data) {
+		log(data.name + ' joined the game', data.color);
+		var player = new BomberPlayer(data.id, data.name, data.color);
+		player.position = data.position;
 		var sprite = $('<div class="sprite" id="sprite_' + player.id + '">');
 		sprite.offset(player.position);
 		sprite.css('background-color', '#' + player.color);
+		sprite.hide();
 		$("#arena").append(sprite);
 		player.sprite = sprite;
 		window.game.addPlayer(player);
+		sprite.fadeIn(500);
 		return (player);
+	}
+
+	this.removePlayer = function (data) {
+		var player = window.game.findPlayer(data.id);
+		log(player.name + " left the game", data.color);
+		window.game.removePlayer(player);
+		player.sprite.fadeOut(500, function () {
+			$(this).remove();
+		});
+		player = null;
 	}
 
 	this.startGame = function () {
@@ -126,38 +135,33 @@ function BomberClient(player) {
 	}
 
 	onmessage = function (evt) {
-		try {
-			var message = JSON.parse(evt.data);
-			switch (message.type) {
-				case 'error':
-					log(message.data, 'ff0000');
-					break;
-				case 'game-init':
-					this.init(message.data);
-					break;
-				case 'game-started':
-					log("GO GO GO!");
-					this.startGame();
-					break;
-				case 'player-changed-direction':
-					window.game.updatePlayer(message.data);
-					break;
-				case 'player-joined':
-					log(message.data.name + ' joined the game', message.data.color);
-					var player = new BomberPlayer(message.data.id, message.data.name, message.data.color);
-					player.position = message.data.position;
-					this.initPlayer(player);
-					break;
-				default:
-					if (data && data.color) {
-						log(data.message, data.color);
-					} else {
-						log(evt.data);
-					}
-			}
-		} catch (exception) {
-			log(evt.data);
-			log(exception.message);
+		var message = JSON.parse(evt.data);
+		switch (message.type) {
+			case 'error':
+				log(message.data, 'ff0000');
+				break;
+			case 'game-init':
+				this.init(message.data);
+				break;
+			case 'game-started':
+				log("GO GO GO!");
+				this.startGame();
+				break;
+			case 'player-changed-direction':
+				window.game.updatePlayer(message.data);
+				break;
+			case 'player-joined':
+				this.initPlayer(message.data);
+				break;
+			case 'player-left':
+				this.removePlayer(message.data);
+			default:
+				alert(evt);
+				if (data && data.color) {
+					log(data.message, data.color);
+				} else {
+					log(data);
+				}
 		}
 	}
 
