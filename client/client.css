@@ -1,0 +1,39 @@
+﻿body {
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+
+div#canvas {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	border: 0px solid #666;
+	background-color: #000;
+	width: 256px;
+	height: 256px;
+}
+
+div#log {
+	height: 400px;
+	overflow: auto;
+	font-family: Consolas;
+	font-size: 0.7em;
+}	
+
+div#log-wrapper {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	width: 600px;
+	background-color: #000;
+	color: #999;
+}
+div.sprite {
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	background: transparent url(sprite.png) no-repeat scroll 0px 0px;
+}
