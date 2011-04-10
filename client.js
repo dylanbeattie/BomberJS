@@ -28,6 +28,11 @@ function BomberClient(player) {
 
 	this.origin = $("#canvas").offset();
 
+	this.updateOrientation = function () {
+		this.origin = $("#canvas").offset();
+		this.animate();
+	}
+
 	this.connect = function () {
 		if (window.WebSocket) {
 			host = (document.location.host != "" ? document.location.host : "localhost:8000");
@@ -62,6 +67,18 @@ function BomberClient(player) {
 		player.sprite.css({ backgroundPosition: backgroundLeftPosition + 'px ' + backgroundTopPosition + 'px' });
 	}
 
+	this.updateUI = function () {
+		if (window.player) {
+			if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+				$("#keypad").show();
+			}
+			$("#spectatorMode").hide();
+		} else {
+			$("#keypad").hide();
+			$("#spectatorMode").show();
+		}
+	}
+
 	this.init = function (data) {
 		window.game = BomberGame.FromData(data.game);
 		drawGame(window.game);
@@ -76,6 +93,7 @@ function BomberClient(player) {
 				this.updateCss(tempPlayer);
 			}
 		}
+		this.updateUI();
 		this.startGame();
 	}
 
@@ -224,11 +242,57 @@ function BomberClient(player) {
 		if (oldVelocity.dx == newVelocity.dx && oldVelocity.dy == newVelocity.dy) return;
 		this.notifyChangeDirection();
 	}
+
+
+	this.buttondown = function (e) {
+		var button = $(e.target);
+		switch (button.attr('rel')) {
+			case 'moveUp': window.player.goUp.call(window.player); break;
+			case 'moveDown': window.player.goDown.call(window.player); break;
+			case 'moveLeft': window.player.goLeft.call(window.player); break;
+			case 'moveRight': window.player.goRight.call(window.player); break;
+			case 'moveUpRight':
+				window.player.goUp.call(window.player); window.player.goRight.call(window.player); break;
+			case 'moveUpLeft':
+				window.player.goUp.call(window.player); window.player.goLeft.call(window.player); break;
+			case 'moveDownRight':
+				window.player.goDown.call(window.player); window.player.goRight.call(window.player); break;
+			case 'moveDownLeft':
+				window.player.goDown.call(window.player); window.player.goLeft.call(window.player); break;
+		}
+		this.notifyChangeDirection();
+	}
+
+	this.buttonup = function (e) {
+		var button = $(e.target);
+		switch (button.attr('rel')) {
+			case 'moveUp':
+			case 'moveDown':
+				window.player.verticalStop.call(window.player);
+				break;
+			case 'moveLeft':
+			case 'moveRight':
+				window.player.horizontalStop.call(window.player);
+				break;
+			case 'moveUpRight':
+			case 'moveUpLeft':
+			case 'moveDownRight':
+			case 'moveDownLeft':
+				window.player.verticalStop.call(window.player);
+				window.player.horizontalStop.call(window.player);
+				break;
+		}
+		this.notifyChangeDirection();
+	}
 }
 
 $(function () {
 	var client = new BomberClient();
 	$("html").bind('keydown', client.keydown.bind(client));
 	$("html").bind('keyup', client.keyup.bind(client));
+
+	$("div#keypad button").bind('touchstart', client.buttondown.bind(client));
+	$("div#keypad button").bind('touchend', client.buttonup.bind(client));
+
 	client.connect();	
 });

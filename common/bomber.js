@@ -63,8 +63,8 @@ function BomberGame(id, name) {
 	this.id = id;
 	this.name = (name ? name : "Game #" + id);
 	/* This should really be device-independent to allow for different rendering contexts */
-	this.arenaWidth = 256;
-	this.arenaHeight = 256;
+	this.arenaWidth = 320;
+	this.arenaHeight = 192;
 	this.spriteSize = 32;
 	var minX = 0;
 	var maxX = this.arenaWidth - this.spriteSize;

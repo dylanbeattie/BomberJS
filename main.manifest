@@ -1,0 +1,19 @@
+﻿CACHE MANIFEST
+ 
+client.html
+client.js
+client/client.css
+client/apple-touch-icon-114x114-precomposed.png
+client/apple-touch-icon-57x57-precomposed.png
+client/apple-touch-icon-72x72-precomposed.png
+client/apple-touch-icon-precomposed.png
+client/apple-touch-icon.png
+client/buttons.png
+client/sprite.png
+client/startup.png
+client/
+client/jquery-1.4.4.js
+client/jquery-ui.js
+client/jquery.scrollto-1.4.2-min.js
+common/bomber.js
+common/json2.js

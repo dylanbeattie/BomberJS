@@ -1,11 +1,39 @@
 <!doctype html>
-<html>
+<html lang="en" manifest="main.manifest">
 <head>
-	<title>BomberJS</title>
+	<title>CartmanJS</title>
 	<link rel="stylesheet" type="text/css" href="client/client.css" />
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>CartmanJS</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="apple-touch-icon" href="client/apple-touch-icon.png" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<link rel="apple-touch-startup-image" href="client/startup.png" />
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 </head>
 <body>
 	<div id="canvas">
+	</div>
+	<div id="keypad">
+		<button id="uButton" rel="moveUp" />
+		<button id="urButton" rel="moveUpRight" />
+		<button id="rButton" rel="moveRight" />
+		<button id="drButton" rel="moveDownRight" />
+		<button id="dButton" rel="moveDown" />
+		<button id="dlButton" rel="moveDownLeft" />
+		<button id="lButton" rel="moveLeft" />
+		<button id="ulButton" rel="moveUpLeft" />
+	</div>
+	<div id="spectatorMode">
+		<p>Game full!</p>
+		<p>(running in spectator mode)</p>
+	</div>
+	<div id="needsPortrait">
+		<p>Sorry...</p>
+		<p>Cartman doesn't work sideways.</p>
 	</div>
 </body>
 

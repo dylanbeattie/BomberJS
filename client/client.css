@@ -1,39 +1,35 @@
-﻿body {
-	height: 100%;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
-	overflow: hidden;
+﻿body { height: 100%; width: 100%; margin: 0px; padding: 0px; overflow: hidden; }
+html { font-family: Trebuchet MS, Verdana; }
+div#canvas { position: absolute; left: 20px; top: 20px; border: 0px solid #666; background-color: #000; width: 320px; height: 192px; }
+div#log { height: 400px; overflow: auto; font-family: Consolas; font-size: 0.7em; }
+div#log-wrapper { position: absolute; right: 10px; top: 10px; width: 600px; background-color: #000; color: #999; }
+div.sprite { width: 32px; height: 32px; position: absolute; background: transparent url(sprite.png) no-repeat scroll 0px 0px; }
+
+div#needsPortrait { margin: 64px auto; font-weight: bold; font-size: 24px; text-align: center; }
+div#keypad { position: absolute; display: none; }
+
+div#keypad button { width: 48px; height: 48px; position: absolute; background: transparent url(../client/buttons.png) no-repeat 0px 0px; border: 0px; padding: 0px; }
+
+div#keypad button#uButton { top: 0px; left: 50px; background-position: -144px 0px; }
+div#keypad button#dButton { top: 100px; left: 50px; background-position: -96px 0px; }
+div#keypad button#lButton { top: 50px; left: 0px; background-position: -48px 0px; }
+div#keypad button#rButton { top: 50px; left: 100px; }
+div#keypad button#urButton { top: 0px; left: 100px; background-position: -192px 0px; }
+div#keypad button#drButton { top: 100px; left: 100px; background-position: -336px 0px; }
+div#keypad button#ulButton { top: 0px; left: 0px; background-position: -240px 0px; }
+div#keypad button#dlButton { top: 100px; left: 0px; background-position: -288px 0px; }
+div#spectatorMode { position: absolute; top: 192px; width: 320px; left: 0px; text-align: center; padding: 24px 0px; height: 200px; display: none; }
+div#needsPortrait { display: none; }
+/* Portrait layout for iPhones */
+@media only screen and (max-width: 320px) {
+	div#canvas { left: 0px; top: 0px; }
+	div#keypad { top: 200px; left: 85px; display: none; }
+	div#needsPortrait { display: none; }
+}
+/* Landscape layout for iPhones */
+@media only screen and (min-width: 321px) and (max-device-width: 480px) {
+	div#canvas { display: none; left: 100px; top: 12px; }
+	div#keypad { display: none; top: 32px; left: 320px; }
+	div#needsPortrait { display: block; }
 }
 
-div#canvas {
-	position: absolute;
-	left: 20px;
-	top: 20px;
-	border: 0px solid #666;
-	background-color: #000;
-	width: 256px;
-	height: 256px;
-}
-
-div#log {
-	height: 400px;
-	overflow: auto;
-	font-family: Consolas;
-	font-size: 0.7em;
-}	
-
-div#log-wrapper {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	width: 600px;
-	background-color: #000;
-	color: #999;
-}
-div.sprite {
-	width: 32px;
-	height: 32px;
-	position: absolute;
-	background: transparent url(sprite.png) no-repeat scroll 0px 0px;
-}
